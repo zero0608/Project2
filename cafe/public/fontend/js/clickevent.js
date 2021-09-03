@@ -1,0 +1,447 @@
+$(document).ready(function(){
+	cms_del_pro_order();
+	cms_load_infor_order();
+	//plus-minus
+	
+	// load page
+	$('.ft-tabs .tabs-list li a').click(function(){
+		$('.ft-tabs .tabs-list li a').removeClass('active');
+		$(this).addClass('active');
+		var tab = $(this).attr('data');
+		if(tab=='listtable'){
+			$('#table-list').attr('hidden',false);
+			// $('#table-list').load('table.php');
+			$('#pos').attr('hidden',true);
+		}else{
+			$('#table-list').attr('hidden',true);
+			$('#pos').attr('hidden',false);
+		}
+	});
+
+	// search menu
+	// $('#search-menu').keyup(function(){
+	// 	var menuname = $(this).val();
+	// 	var _token=$('meta[name="csrf-token"]').attr('content');
+	// 	if(menuname==''){
+	// 		$('#result-menu-post').css('display','none');
+	// 	}
+	// 	else{
+	// 		$param = {
+	// 			type:'POST',
+	// 			url:'searchmenu',
+	// 			dataType:'html',
+	// 			data:
+	// 			{
+	// 				_token:_token,
+	// 				menuname:menuname
+	// 			},
+	// 			// headers: {
+ //    //             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+ //    //         	},
+	// 			callback: function(data){
+	// 				$('#result-menu-post').html(data);
+	// 				$('#result-menu-post').css('display','block');
+	// 			}
+	// 		}
+	// 		ajax_adapter($param);
+	// 	}
+	// });
+
+	// //pay the customer's money
+	// $('.customer-pay').keyup(function(){
+	// 	var customer_pay;
+	// 	if($(this).val()==''){
+	// 		customer_pay=0;
+	// 	}else{
+	// 		customer_pay = cms_decode_currency_format($(this).val());
+	// 	}
+	// 	var total_pay = cms_decode_currency_format($('.total-pay').val());
+	// 	var debt = customer_pay - total_pay;
+	// 	$(this).val(cms_encode_currency_format(customer_pay));
+	// 	$('.excess-cash').html(cms_encode_currency_format(debt));
+	// });
+
+
+
+
+	// $('#customer-infor').keyup(function(){
+	// 	var customer = $(this).val();
+	// 	if(customer==''){
+	// 		$('#result-customer').css('display','none');
+	// 	}else{
+	// 		$param = {
+	// 			type:'POST',
+	// 			url:'searchcustomer.php',
+	// 			dataType:'html',
+	// 			data:
+	// 			{
+	// 				customer:customer
+	// 			},
+	// 			callback: function(data){
+	// 				$('#result-customer').html(data);
+	// 				$('#result-customer').css('display','block');
+	// 			}
+	// 		}
+	// 		ajax_adapter($param);
+	// 	}
+	// });
+
+	$('.del-customer').click(function(){
+		$('#customer-infor').val('');
+		$('#customer-infor').attr('disabled',false);
+		$('#customer-infor').removeAttr('data-id');
+		$(this).html('');
+	});
+});
+
+
+//send data ajax
+function ajax_adapter($param){
+	$.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+	var _token=$('meta[name="csrf-token"]').attr('content');
+	$.ajax({
+		type:$param.type,
+		url:$param.url,
+		data:
+		$param.data,
+		dataType:$param.dataType,
+		async:true,
+		success:$param.callback
+	});
+}
+
+// function cms_load_pos($id_table){
+// 	$param={
+// 		type:'GET',
+// 		url:'http://127.0.0.1:8000/ajax',
+// 		dataType:'html',
+// 		data:
+// 		{
+// 			id_table:$id_table
+// 		},
+// 		callback: function(data){
+// 			$('#content-listmenu').html(data);
+// 			cms_load_infor_order();
+// 			cms_load_Excesscash();
+// 		}
+// 	}
+// 	ajax_adapter($param);
+// 	$('#table-list').attr('hidden',true);
+// 	$('#pos').attr('hidden',false);
+// 	$('.table_infor').html('<strong data-id="'+$id_table+'" id="table_id">Bàn '+$id_table+'</strong>');
+// }
+// load category
+// function cms_load_cate($id_cate){
+// 	var $param={
+// 		type:'POST',
+// 		url:'cms_load_cate.php',
+// 		dataType:'html',
+// 		data:
+// 		{
+// 			id_cate:$id_cate
+// 		},
+// 		callback: function(data){
+// 			$('.product-list-content').html(data);
+// 		}
+// 	}
+// 	ajax_adapter($param);
+// }
+
+// function cms_load_table($id_table){
+// 	var $param={
+// 		type:'POST',
+// 		url:'table.php',
+// 		dataType:'html',
+// 		data:
+// 		{
+// 			id_table:$id_table
+// 		},
+// 		callback: function(data){
+// 			$('.table-list').html(data);
+// 		}
+// 	}
+// 	ajax_adapter($param);
+// 	$('#table-list').attr('hidden',false);
+// 			// $('#table-list').load('table.php');
+// 			$('#pos').attr('hidden',true);
+// 		}
+
+
+		// function cms_select_menu($id_menu){
+		// 	if($('#pro_search_append tr').length != 0){
+		// 		var flag= 0;
+		// 		$('#pro_search_append tr').each(function(){
+		// 			var id_temp = $(this).attr('data-id');
+		// 			if($id_menu==id_temp){
+		// 				var value_input = $(this).find('input.quantity-product-oders');
+		// 				value_input.val(parseInt(value_input.val()) + 1);
+		// 				flag = 1;
+		// 				cms_load_infor_order();
+		// 				cms_load_Excesscash();
+		// 			}
+		// 		});
+		// 		if(flag==0){
+		// 			var $param={
+		// 				type:'POST',
+		// 				url:'appendproduct.php',
+		// 				dataType:'html',
+		// 				data:
+		// 				{
+		// 					id_menu:$id_menu
+		// 				},
+		// 				callback: function(data){
+		// 					$('#pro_search_append').prepend(data);
+		// 					cms_load_infor_order();
+		// 					cms_load_Excesscash();
+		// 				}
+		// 			}
+		// 			ajax_adapter($param);
+		// 		}
+		// 	}else{
+		// 		var $param={
+		// 			type:'POST',
+		// 			url:'appendproduct.php',
+		// 			dataType:'html',
+		// 			data:
+		// 			{
+		// 				id_menu:$id_menu
+		// 			},
+		// 			callback: function(data){
+		// 				$('#pro_search_append').prepend(data);
+		// 				cms_load_infor_order();
+		// 			}
+		// 		}
+		// 		ajax_adapter($param);
+		// 	}
+		// }
+
+
+		function cms_select_customer($idcustomer){
+			var customer_name=$('li.data-cus-'+$idcustomer).text();
+			$('#customer-infor').val(customer_name);
+			$('#customer-infor').attr('data-id',$idcustomer);
+			$('.del-customer').html('<i class="fa fa-minus-circle" aria-hidden="true"></i>');
+			$('#customer-infor').attr('disabled',true);
+			$('#result-customer').css('display','none');
+		}
+
+
+		function cms_decode_currency_format(obs) {
+			if (obs == '')
+				return 0;
+			else
+				return parseInt(obs.replace(/,/g, ''));
+		}
+
+		function cms_encode_currency_format(obs) {
+			return obs.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+
+		function cms_load_infor_order(){
+			var $total_money=0;
+			$('tbody#pro_search_append tr').each(function () {
+				$quantity_product = $(this).find('input.quantity-product-oders').val();
+				$price = cms_decode_currency_format($(this).find('input.price-order').val());
+				$total = $price * $quantity_product;
+				$total_money += $total;
+				$(this).find('td.total-money').html(cms_encode_currency_format($total));
+				$('input.total-pay').val(cms_encode_currency_format($total_money));
+			});
+		}
+
+		function cms_load_Excesscash(){
+			$('.customer-pay').keyup(function(){
+				var customer_pay;
+				if($(this).val()==''){
+					customer_pay=0;
+				}else{
+					customer_pay = cms_decode_currency_format($(this).val());
+				}
+				var total_pay = cms_decode_currency_format($('.total-pay').val());
+				var debt = customer_pay - total_pay;
+				$(this).val(cms_encode_currency_format(customer_pay));
+				$('.excess-cash').html(cms_encode_currency_format(debt));
+			});
+		}
+
+		function cms_del_pro_order(){
+			$('body').on('click', '.del-pro-order', function () {
+				$(this).parents('tr').remove();
+				cms_load_infor_order();
+				cms_load_Excesscash();
+			});
+		}
+
+		// function cms_save_table(){
+		// 	if($('tbody#pro_search_append tr').length !=0){
+		// 		var customer_id = $('#customer-infor').attr('data-id');
+		// 		var table_id = $('#table_id').attr('data-id');
+		// 		if (typeof table_id !== 'undefined' && table_id !== false) {
+		// 			var note = $('#note-order').val();
+		// 			var customer_id = typeof $('#customer-infor').attr('data-id') === 'undefined' ? 0 : $('#customer-infor').attr('data-id');
+		// 			var customer_pay = cms_decode_currency_format($('input.total-pay').val());
+		// 			var detail = [];
+		// 			$('tbody#pro_search_append tr').each(function () {
+		// 				var id = $(this).attr('data-id');
+		// 				var quantity = $(this).find('input.quantity-product-oders').val();
+		// 				var price = cms_decode_currency_format($(this).find('input.price-order').val());
+		// 				detail.push(
+		// 					{id: id, quantity: quantity, price: price}
+		// 					);
+		// 			});
+		// 			var $data ={
+		// 				'data':{
+		// 					'table_id':table_id,
+		// 					'customer_id':customer_id,
+		// 					'note':note,
+		// 					'customer_pay':customer_pay,
+		// 					'detai_oder':detail
+		// 				}
+		// 			}
+		// 			var $param={
+		// 				type:'POST',
+		// 				url:'paymentbill.php',
+		// 				dataType:'html',
+		// 				data:$data,
+		// 				callback: function(data){
+		// 					var mywindow = window.open('', 'In hóa đơn', 'height=500,width=1000');
+		// 					if (mywindow == null) {
+		// 						alert('Trình duyệt đã ngăn không cho phần mềm In. Vui lòng mở khóa hiển thị In ở góc phải phía trên của trình duyệt');
+		// 					} else {
+		// 						mywindow.document.writeln(data);
+		// 						mywindow.document.close();
+		// 						mywindow.focus();
+		// 						mywindow.print();
+		// 						mywindow.close();
+		// 						location.reload();
+		// 					}
+		// 				}
+		// 			}
+		// 			ajax_adapter($param);
+
+		// 		}else{
+		// 			$('.alert-login').html('<h3>Thông báo !</h3><p>Vui lòng chọn bàn</p>').fadeIn().delay(1000).fadeOut('slow');
+		// 		}}else{
+		// 			$('.alert-login').html('<h3>Thông báo !</h3><p>Vui lòng chọn ít nhất 1 sản phẩm trước khi lưu</p>').fadeIn().delay(1000).fadeOut('slow');
+		// 		}
+		// 	}
+
+
+
+// 			function cms_save_oder(){
+// 				if($('tbody#pro_search_append tr').length !=0){
+// 					var customer_id = $('#customer-infor').attr('data-id');
+// 					var table_id = $('#table_id').attr('data-id');
+// 					if (typeof table_id !== 'undefined' && table_id !== false) {
+// 						var note = $('#note-order').val();
+// 						var customer_id = typeof $('#customer-infor').attr('data-id') === 'undefined' ? 0 : $('#customer-infor').attr('data-id');
+// 						var customer_pay = cms_decode_currency_format($('input.total-pay').val());
+// 						var detail = [];
+// 						$('tbody#pro_search_append tr').each(function () {
+// 							var id = $(this).attr('data-id');
+// 							var quantity = $(this).find('input.quantity-product-oders').val();
+// 							var price = cms_decode_currency_format($(this).find('input.price-order').val());
+// 							detail.push(
+// 								{id: id, quantity: quantity, price: price}
+// 								);
+// 						});
+// 						var $data ={
+// 							'data':{
+// 								'table_id':table_id,
+// 								'customer_id':customer_id,
+// 								'note':note,
+// 								'customer_pay':customer_pay,
+// 								'detai_oder':detail
+// 							}
+// 						}
+// 						var $param={
+// 							type:'POST',
+// 							url:'savebill.php',
+// 							dataType:'html',
+// 							data:$data,
+// 							callback: function(data){
+// 								$('.alert-login').html(data).fadeIn().delay(1000).fadeOut('slow').css('background','#599130');
+// 								cms_load_pos(table_id);
+// 							}
+// 						}
+// 						ajax_adapter($param);
+// 	// 	$('#table-list').attr('hidden',true);
+// 	// $('#pos').attr('hidden',false);
+
+// }else{
+// 	$('.alert-login').html('<h3>Thông báo !</h3><p>Vui lòng chọn bàn</p>').fadeIn().delay(1000).fadeOut('slow');
+// }}else{
+// 	$('.alert-login').html('<h3>Thông báo !</h3><p>Vui lòng chọn ít nhất 1 sản phẩm trước khi lưu</p>').fadeIn().delay(1000).fadeOut('slow');
+// }
+// 	// location.reload();
+	
+// }
+
+
+$( document ).on('click','.btn-number',function(e){       
+			e.preventDefault();                
+			var fieldName = $(this).attr('data-field');        
+			var type      = $(this).attr('data-type');        
+			var input = $("input[name='"+fieldName+"']");        
+			var currentVal = parseInt(input.val());        
+			if (!isNaN(currentVal)) {            
+				if(type == 'minus') {                
+					var minValue = parseInt(input.attr('min'));                 
+					if(!minValue) minValue = 1;                
+					if(currentVal > minValue) {                    
+						input.val(currentVal - 1).change();     
+							cms_load_infor_order();
+						cms_load_Excesscash();               
+					}                 
+					if(parseInt(input.val()) == minValue) {                    
+						$(this).attr('disabled', true);                
+					}                
+				} 
+				else if(type == 'plus') {                
+					var maxValue = parseInt(input.attr('max'));                
+					if(!maxValue) maxValue = 50;                
+					if(currentVal < maxValue) {                    
+						input.val(currentVal + 1).change();
+						cms_load_infor_order();
+						cms_load_Excesscash();                
+					}                
+					if(parseInt(input.val()) == maxValue) {                    
+						$(this).attr('disabled', true);                
+					}                
+				}        
+			} 
+			else {            
+				input.val(0);        
+			}      
+
+		$('.input-number').focusin(function(){       
+			$(this).data('oldValue', $(this).val());    
+		});    
+		$('.input-number').change(function() {                
+			var minValue =  parseInt($(this).attr('min'));        
+			var maxValue =  parseInt($(this).attr('max'));        
+			if(!minValue) minValue = 1;        
+			if(!maxValue) maxValue = 50;        
+			var valueCurrent = parseInt($(this).val());                
+			var name = $(this).attr('name');        
+			if(valueCurrent >= minValue) {            
+				$(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')        
+			} 
+			else {            
+				alert('Sorry, the minimum value was reached');            
+				$(this).val($(this).data('oldValue'));        
+			}        
+			if(valueCurrent <= maxValue) {            
+				$(".btn-number[data-type='plus'][data-field='"+name+"']").removeAttr('disabled')        
+			} else {            
+				alert('Sorry, the maximum value was reached');            
+				$(this).val($(this).data('oldValue'));        
+			}                    
+		});    
+		
+	});
+
