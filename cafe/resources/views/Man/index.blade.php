@@ -47,8 +47,8 @@
 						<li class="list-group-item"><a href="{{route('admin.cus')}}"><i class="fa fa-users" aria-hidden="true"></i>Khách hàng / NCC</a></li>
 						<li class="list-group-item"><a href="{{route('admin.product1')}}"><i class="fa fa-list-alt" aria-hidden="true"></i>Thực đơn</a></li>
 						<li class="list-group-item"><a href="{{route('admin.ware')}}"><i class="fa fa-truck" aria-hidden="true"></i>Nhập kho</a></li>
-						<li class="list-group-item"><a href="{{route('admin.das')}}"><i class="fa fa-file-text-o" aria-hidden="true"></i>Phiếu thu</a></li>
-						<li class="list-group-item"><a href="{{route('admin.das')}}"><i class="fa fa-file-text-o" aria-hidden="true"></i>Phiếu chi</a></li>
+						<li class="list-group-item"><a href="{{route('admin.receipts')}}"><i class="fa fa-file-text-o" aria-hidden="true"></i>Phiếu thu</a></li>
+						<li class="list-group-item"><a href="{{route('admin.payment')}}"><i class="fa fa-file-text-o" aria-hidden="true"></i>Phiếu chi</a></li>
 						<li class="list-group-item"><a href=""><i class="fa fa-signal" aria-hidden="true"></i>Doanh thu</a></li>
 						<li class="list-group-item"><a href="{{route('admin.das')}}"><i class="fa fa-cogs" aria-hidden="true"></i></i>Thiết lập</a></li>
 					</ul>

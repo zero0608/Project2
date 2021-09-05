@@ -9,7 +9,7 @@ class Products extends Model
 {
     use HasFactory;
     protected $table = 'products';
-    protected $primaryKey = 'IdArea';
+    protected $primaryKey = 'IdProduct';
     protected $keyType = 'string';
     // (khóa chính là kiểu string)
     // public $timestamps = false;(k cho thoi gian hđ)
@@ -23,5 +23,15 @@ class Products extends Model
         'SallingPrice',
         'IdSupplier',
         'Idcate',
+        'active',
     ];
+
+    public function getcheck1Attribute(){
+      if($this->active==0){
+        return 'KHÓA';
+      }
+      if($this->active==1){
+        return 'BẬT';
+      }
+    }
 }

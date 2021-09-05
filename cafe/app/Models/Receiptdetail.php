@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\Products;
 class Receiptdetail extends Model
 {
     use HasFactory;
@@ -15,8 +15,22 @@ class Receiptdetail extends Model
      protected $fillable = [
         'DetaiId',
         'Idreceipt',
+        'IdProduct',
         'Quantity',
         'Unit',
         'Price',
     ];
+
+
+     public function getproAttribute(){
+      $id=$this->IdProduct;
+      $us=Products::where('IdProduct','=',$id)->first();
+      return $us->NameProduct;
+    }
+
+    public function getunitAttribute(){
+      $id=$this->IdProduct;
+      $us=Products::where('IdProduct','=',$id)->first();
+      return $us->Unit;
+    }
 }

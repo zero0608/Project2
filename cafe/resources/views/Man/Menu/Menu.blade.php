@@ -76,7 +76,7 @@
 										</button>
 									</div>
 									<div class="modal-body">
-										<form action="{{route('menure.destroy',$row->IdMenu)}}" method="post" enctype="multipart/form-data">
+										<form action="{{route('menure.update',$row->IdMenu)}}" method="post" enctype="multipart/form-data">
          							 @csrf
          							 @method("put")
 										<div class="row form-group">

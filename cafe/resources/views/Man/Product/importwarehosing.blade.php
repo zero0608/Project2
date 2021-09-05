@@ -5,9 +5,9 @@
 		<h2>Tạo phiếu nhập <i class="fa fa-angle-double-right" aria-hidden="true"></i></h2>
 	</div>
 	<div class="col-md-7 text-right action">
-		<button class="btn btn-primary"><i class="fa fa-floppy-o" aria-hidden="true"></i> Lưu</button>
+		<button class="btn btn-primary" onclick="cms_save_oder()"><i class="fa fa-floppy-o" aria-hidden="true" ></i> Lưu</button>
 		{{-- <button class="btn btn-primary"><i class="fa fa-print" aria-hidden="true"></i> Lưu & In</button> --}}
-		<button class="btn" onclick="cms_cancel_import();"><i class="fa fa-arrow-left" aria-hidden="true"></i> Hủy</button>
+		<button class="btn"><a href="{{route('admin.ware')}}"><i class="fa fa-arrow-left" aria-hidden="true"></i> Hủy</a></button>
 	</div>
 </div>
 <div class="row content-inport">
@@ -90,9 +90,9 @@
 		</div>
 		<div class="col-md-8">
 			<div class="input-group">
-				<select class="form-control" name="areas-id-{{$row->IdTable}}" id="tableselect">
+				<select class="form-control" name="sup" id="tableselect">
 					@foreach($sup as $row1)
-					<option value="{{$row1->IdSupplier}}" 
+					<option class="form-control" value="{{$row1->IdSupplier}}" 
 						>{{$row1->Namesupplier}}
 					</option>
 					@endforeach
@@ -100,22 +100,15 @@
 				</div>
 			</div>
 	</div>
-	<div class="row form-group">
-		<div class="col-md-4 p-0">
-			<strong>Ngày nhập</strong>
-		</div>
-		<div class="col-md-8">
-			<input type="date" class="form-control">
-		</div>
-	</div>
+	
 	<div class="row form-group">
 		<div class="col-md-4 p-0">
 			<strong>Người nhập</strong>
 		</div>
 		<div class="col-md-8">
-			<select class="form-control" name="user-id-{{$row->IdTable}}" id="tableselect">
+			<select class="form-control" name="user" id="tableselect">
 				@foreach($user as $row2)
-				<option value="{{$row2->UserId}}" 
+				<option class="form-control" value="{{$row2->UserId}}" 
 					>{{$row2->UserName}}
 				</option>
 				@endforeach
@@ -127,7 +120,7 @@
 			<strong>Ghi chú</strong>
 		</div>
 		<div class="col-md-8">
-			<textarea class="form-control" rows="3" placeholder="Ghi chú"></textarea>
+			<textarea class="form-control" rows="3" placeholder="Ghi chú" id="note-order"></textarea>
 		</div>
 	</div>
 	<div class="row">
@@ -320,6 +313,51 @@ $( document ).on('click','.btn-number',function(e){
 	});    
 
 });
+
+
+
+function cms_save_oder(){
+	if($('tbody#pro_search_append tr').length !=0){
+		var note = $('#note-order').val();
+		var pay = cms_decode_currency_format($('input.total-pay').val());
+		var user=$('select[name="user"]').val();
+		var sup = $('select[name="sup"]').val();
+		var detail = [];
+		$('tbody#pro_search_append tr').each(function () {
+			var id = $(this).attr('data-id');
+			var quantity = $(this).find('input.quantity-product-oders').val();
+			var price = cms_decode_currency_format($(this).find('input.price-order').val());
+			detail.push(
+				{id: id, quantity: quantity, price: price}
+				);
+		});
+		var $data ={
+			'data':{
+				'user':user,
+				'sup':sup,
+				'note':note,
+				'pay':pay,
+				'detai_oder':detail
+			}
+		}
+		var $param={
+			type:'POST',
+			url:'{{route('admin.save_pro')}}',
+			dataType:'html',
+			data:$data,
+			callback: function(data){
+				$('.alert-login').html(data).fadeIn().delay(1000).fadeOut('slow').css('background','#599130');
+				location.reload();
+			}
+		}
+		ajax_adapter($param);
+
+
+	}else{
+		$('.alert-login').html('<h3>Thông báo !</h3><p>Vui lòng chọn ít nhất 1 sản phẩm trước khi lưu</p>').fadeIn().delay(1000).fadeOut('slow');
+	}
+}
+
 
 </script>
 @endsection

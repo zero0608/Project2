@@ -11,6 +11,9 @@ use App\Http\Controllers\Man\PeopleController;
 use App\Http\Controllers\Man\MenuController;
 use App\Http\Controllers\Man\CateController;
 use App\Http\Controllers\Man\ProductController;
+use App\Http\Controllers\Man\BallotController;
+use App\Http\Controllers\Man\ReceiptController;
+use App\Http\Controllers\Man\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -54,22 +57,31 @@ Route::post('ajax', [PosoneController::class,'searchmenu'])->name('searchmenu');
 
 Route::prefix('/admin')->as('admin.')->group(function () {
     Route::get('Bills',[BillController::class,'bill'])->name('bill');
+    Route::get('pagination_bill',[BillController::class,'pagination'])->name('pagination_bill');
+
     Route::get('',function(){
-    return view('Man.dashboard');
-})->name('das');
-   
-    Route::get('merchandise',function(){
-    return view('Man.merchandise');
-})->name('merc');
+        return view('Man.dashboard');
+    })->name('das');
 
- Route::get('warehouse',function(){
-    return view('Man.warehousing');
-})->name('ware');
+    Route::get('receipts',[ReceiptController::class,'index'])->name('receipts');
+    Route::get('pagination_re',[ReceiptController::class,'pagination_re'])->name('pagination_re');
 
-Route::get('product',[ProductController::class,'index'])->name('kk');
-Route::post('pro_append',  [ProductController::class,'append'])->name('pro_append');
-Route::post('pro_search', [ProductController::class,'searchmenu'])->name('pro_searchmenu');
+    Route::get('payment',[PaymentController::class,'index'])->name('payment');
+    Route::get('pagination_pay',[PaymentController::class,'pagination_pay'])->name('pagination_pay');
 
+    Route::get('warehouse',[BallotController::class,'ballot'])->name('ware');
+    Route::get('pagination_ballot',[BallotController::class,'pagination'])->name('pagination_ballot');
+  
+
+    Route::get('merchandise',[ProductController::class,'index1'])->name('merc');
+    Route::get('pagination_pro',[ProductController::class,'pagination_pro'])->name('pagination_pro');
+    Route::post('keypro',[ProductController::class,'key1'])->name('keypro');
+    Route::post('save_pro',[ProductController::class,'save1'])->name('pro');
+
+    Route::get('product',[ProductController::class,'index'])->name('kk');
+    Route::post('pro_append',  [ProductController::class,'append'])->name('pro_append');
+    Route::post('pro_search', [ProductController::class,'searchmenu'])->name('pro_searchmenu');
+    Route::post('pro_save', [ProductController::class,'save'])->name('save_pro');
 
 
     Route::get('Menu',[MenuController::class,'index'])->name('product1');
@@ -89,8 +101,11 @@ Route::post('pro_search', [ProductController::class,'searchmenu'])->name('pro_se
     Route::post('key',[TableController::class,'key'])->name('key');
 });
 
- Route::resource('tab', TableController::class);
- Route::resource('are', AreaController::class);
- Route::resource('peo', PeopleController::class);
- Route::resource('menure', MenuController::class);
+Route::resource('tab', TableController::class);
+Route::resource('are', AreaController::class);
+Route::resource('peo', PeopleController::class);
+Route::resource('menure', MenuController::class);
 Route::resource('cate', CateController::class);
+Route::resource('pro', ProductController::class);
+Route::resource('receipt', ReceiptController::class);
+Route::resource('payment', PaymentController::class);

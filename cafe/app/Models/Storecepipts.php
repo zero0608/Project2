@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Users;
+use App\Models\Suppliers;
 
 class Storecepipts extends Model
 {
@@ -23,4 +25,20 @@ class Storecepipts extends Model
         'Image',
         'Totalprice',
     ];
+
+
+     public function getuserAttribute(){
+      $id=$this->IdUser;
+      $us=Users::find($id);
+      return $us->UserName;
+    }
+
+
+     public function getSupplierAttribute(){
+      $id=$this->IdSupplier;
+      $us=Suppliers::find($id);
+      return $us->Namesupplier;
+    }
+
+    
 }

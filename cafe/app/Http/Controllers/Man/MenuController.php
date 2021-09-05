@@ -189,7 +189,7 @@ class MenuController extends Controller
        'Idcate'=>$request->cate,
    ]);
 
-         return redirect("admin/product");
+         return redirect("admin/product1");
     }
 
     /**
