@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Payslips;
 use App\Models\Users;
+use App\Exports\PaymentsExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentController extends Controller
 {
@@ -16,7 +18,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-         $receipt=Payslips::offset(0)->limit(10)->get();
+         $receipt=Payslips::orderByDesc('payslips.created_at')->offset(0)->limit(10)->get();
         $count=Payslips::count();
         $user=Users::all();
         return view('Man.Receipt.payment',['pay'=>$receipt,'count'=>$count,'user'=>$user]);
@@ -26,7 +28,7 @@ class PaymentController extends Controller
         $current_page=$request->current_page;
         $limit=6;
         $start =($current_page-1)*$limit;
-        $pro=Payslips::offset($start)->limit(10)->get();
+        $pro=Payslips::orderByDesc('payslips.created_at')->offset($start)->limit(10)->get();
         
         return view('Man.Receipt.viewpay',['pay'=>$pro]);
     }
@@ -113,5 +115,13 @@ class PaymentController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function export() 
+    {
+        return Excel::download(new PaymentsExport, 'payslips.xlsx');
+
+         //  route('admin.payment');
+
     }
 }

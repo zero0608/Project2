@@ -8,6 +8,7 @@
 	<link rel="stylesheet" href="{{asset('fontend')}}/font-awesome/css/font-awesome.min.css">
 	<script type="text/javascript" src="{{asset('fontend')}}/js/jquery.min.js"></script>
 	<script type="text/javascript" src="{{asset('fontend')}}/js/popper.min.js"></script>
+	 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 	{{-- <script type="text/javascript" src="{{asset('fontend')}}/js/jquery.pjax.js"></script> --}}
 	<script type="text/javascript" src="{{asset('fontend')}}/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="{{asset('fontend')}}/js/load.js"></script>
@@ -17,8 +18,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js" integrity="sha512-7G7ueVi8m7Ldo2APeWMCoGjs4EjXDhJ20DrPglDQqy8fnxsFQZeJNtuQlTT0xoBQJzWRFp4+ikyMdzDOcW36kQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.js" integrity="sha512-THe9Z0v2MIJ3CmLR4JhxZkArrsI9wP7ENJ59DGbn9bvcf06w1JqWV9ol7OfyNkAC5r02F49rG/zm5Z9TiPH32Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
-<body class="crossbar">
-	<div class="header-admin">
+<body class="crossbar" id="haha">
+	<div class="header-admin" style=" position: fixed;width: 100%;z-index:9999">
 		<div class="container-fluid">
 			<div class="row"> 
 				<div class="col-md-12">
@@ -35,9 +36,9 @@
 			</div>
 		</div>
 	</div>
-		<div class="row">
+		<div class="row" style="position: relative;top: 37px;">
 			<div class="col-md-2">
-				<div class="sidebar sidebar-fixed" id="sidebar">
+				<div class="sidebar sidebar-fixed" id="sidebar" style=" position: fixed;">
 					<ul class="list-group">
 						<li class="list-group-item"><a href="{{route('admin.das')}}" class="active"><i class="fa fa-eye" aria-hidden="true"></i>Tổng quan</a>
 						</li>
@@ -256,5 +257,18 @@ function dropFunction() {
   }
 }
 
+
+function reload(){
+	$param = {
+			type:'GET',
+			url:'{{route('admin.das')}}',
+			dataType:'html',
+			callback:function(result){
+					$('#haha').html(result);
+					$('.alert-login').html('<h3>Thông báo !</h3><p>Đã cập nhật dữ liệu mới nhất</p>').fadeIn().delay(1000).fadeOut('slow');
+			}
+		}
+	ajax_adapter($param);
+}
 </script>
 </html>

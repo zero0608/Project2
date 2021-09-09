@@ -6,6 +6,9 @@
 	</div>
 	<div class="col-md-7 text-right action">
 		<button class="btn btn-success" data-toggle="modal" data-target="#ModalAddMenu"><i class="fa fa-plus" aria-hidden="true"></i> Thêm phiếu</button>
+		<form action="{{route('admin.recepexcel')}}" class="btn">
+		<button class=" btn btn-success" type="submit"><i class="fa fa-sign-out" aria-hidden="true"></i> Xuất file</button>
+		</form>
 	</div>
 </div>
 
@@ -35,7 +38,7 @@
 					<td>{{number_format($row->Totalprice,0)}}đ</td>
 					<td>{{$row->Note}}</td>
 					<td>
-						<a href="">{{$row->Format}}</a>
+						{!! $row->check !!}
 					</td>
 					<td>{{$row->created_at}}
 					</td>
@@ -180,5 +183,8 @@
 									});
 								});
 							})
+
+
+							
 						</script>
 						@endsection

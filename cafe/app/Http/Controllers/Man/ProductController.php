@@ -9,6 +9,7 @@ use App\Models\Suppliers;
 use App\Models\Users;
 use App\Models\Storecepipts;
 use App\Models\Receiptdetail;
+use App\Models\Payslips;
 use Illuminate\Support\Facades\File;
 class ProductController extends Controller
 {
@@ -34,7 +35,7 @@ class ProductController extends Controller
         $sup=Suppliers::all();
         return view('Man.Mypro.view',['pro'=>$pro,'sup'=>$sup]);
     }
-    public function key(Request $request){
+    public function key1(Request $request){
         $status=$request->status;
         $id=$request->id;
         if($status==0){
@@ -107,7 +108,7 @@ class ProductController extends Controller
 
     public function searchmenu(Request $request){
     $name=$request->menuname;
-    $data=Products::where('IdProduct', 'like','%'.$name.'%')->orWhere('NameProduct', 'like',$name.'%')->get();
+    $data=Products::where('IdProduct', 'like','%'.$name.'%')->orWhere('NameProduct', 'like',$name.'%')->where('active','=',0)->get();
     // dd($data);
     return view('Man.Product.searchmenu',['data'=>$data]);
     }
@@ -115,7 +116,7 @@ class ProductController extends Controller
 
     public function index()
     {
-        $pro=Products::all();
+        $pro=Products::where('active','=',0)->get();
         $sup=Suppliers::all();
         $user=Users::all();
         return view('Man.Product.importwarehosing',['pro'=>$pro,'sup'=>$sup,'user'=>$user]);
@@ -227,7 +228,13 @@ class ProductController extends Controller
             'Paymentmethod' =>0,
             'Totalprice' =>$pay
         ]);
-        
+         Payslips::create([
+            'UserId'=>$user,
+            'IdStore'=>1,
+            'Note'=>'Tiền nhập hàng',
+            'Totalprice'=>$pay,
+            'Format'=>$idproduct
+        ]);
         echo "<h3>Thông báo !</h3><p>Lưu đơn hàng thành công</p>";
         foreach ($json['detai_oder'] as $value) {
             if($value['id'] != 0){

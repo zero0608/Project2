@@ -76,7 +76,7 @@ class MenuController extends Controller
         $current_page=$request->current_page;
         $limit=6;
         $start =($current_page-1)*$limit;
-        $menu=Menus::menuall($start);
+        $menu=Menus::join('categories','menus.Idcate','=','categories.Idcate')->offset($start)->limit(6)->get();
         $cate=Cate::all();
         return view('Man.Menu.view',['menu'=>$menu,'cate'=>$cate]);
 
@@ -110,7 +110,7 @@ class MenuController extends Controller
 
     public function index()
     {
-       $menu=Menus::menuall(0);
+       $menu=Menus::join('categories','menus.Idcate','=','categories.Idcate')->offset(0)->limit(6)->get();
        $countmenu=Menus::count();
        $cate=Cate::all();
        return view('Man.Menu.Menu',['menu'=>$menu,'count'=>$countmenu,'cate'=>$cate]);

@@ -22,4 +22,12 @@ class Payslips extends Model
         'Image',
         'Totalprice',
     ];
+
+    public function getcheckAttribute(){
+      if($this->Format==null){
+         return "khong co";
+      }else{
+         return '<a href="'.route('ballot.show',$this->Format).'">'.$this->Format.'</a>';
+      }
+    }
 }

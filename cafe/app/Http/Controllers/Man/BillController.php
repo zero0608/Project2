@@ -18,9 +18,9 @@ class BillController extends Controller
         $current_page=$request->current_page;
         $limit=10;
         $start =($current_page-1)*$limit;
-         $info=Bills::join('users','users.UserId', '=','bill.IdUser')->join('tables','tables.IdTable', '=','bill.IdTable')->join('customers','customers.IdCustomer','=','bill.IdCustomer')->select('bill.*', 'users.UserName', 'customers.CustomerName','tables.TableName')->offset($start)->limit(10)->get();
+        $info=Bills::join('users','users.UserId', '=','bill.IdUser')->join('tables','tables.IdTable', '=','bill.IdTable')->join('customers','customers.IdCustomer','=','bill.IdCustomer')->select('bill.*', 'users.UserName', 'customers.CustomerName','tables.TableName')->orderByDesc('bill.created_at')->offset($start)->limit(10)->get();
         $j=0;
-         foreach($info as $value){
+        foreach($info as $value){
             // echo $i++;
             $hi=billdetail::findbill($value->IdBill);
             $i=0;
@@ -39,10 +39,10 @@ class BillController extends Controller
                 'time'=>$value->created_at,
                 'price'=>$value->Totalprice,
                 'note'=>$value->Note,
-                'status'=>$value->StatusB,
                 'nameuser'=>$value->UserName,
                 'namecus'=>$value->CustomerName,
                 'tablename'=>$value->TableName,
+                'status'=>$value->active,
                 'detail'=>$array1
             ];
             $array[$j++]=$list;
@@ -52,7 +52,7 @@ class BillController extends Controller
 
 
     public static function bill(){
-        $info=Bills::join('users','users.UserId', '=','bill.IdUser')->join('tables','tables.IdTable', '=','bill.IdTable')->join('customers','customers.IdCustomer','=','bill.IdCustomer')->select('bill.*', 'users.UserName', 'customers.CustomerName','tables.TableName')->offset(0)->limit(10)->get();
+        $info=Bills::join('users','users.UserId', '=','bill.IdUser')->join('tables','tables.IdTable', '=','bill.IdTable')->join('customers','customers.IdCustomer','=','bill.IdCustomer')->select('bill.*', 'users.UserName', 'customers.CustomerName','tables.TableName')->orderByDesc('bill.created_at')->offset(0)->limit(10)->get();
         $j=0;
         $count=Bills::count();
         foreach($info as $value){
@@ -74,7 +74,7 @@ class BillController extends Controller
                 'time'=>$value->created_at,
                 'price'=>$value->Totalprice,
                 'note'=>$value->Note,
-                'status'=>$value->StatusB,
+                'status'=>$value->active,
                 'nameuser'=>$value->UserName,
                 'namecus'=>$value->CustomerName,
                 'tablename'=>$value->TableName,
@@ -87,7 +87,7 @@ class BillController extends Controller
     
     public function index()
     {
-        
+
     }
 
     /**
@@ -119,7 +119,36 @@ class BillController extends Controller
      */
     public function show($id)
     {
-        //
+        $info=Bills::join('users','users.UserId', '=','bill.IdUser')->join('tables','tables.IdTable', '=','bill.IdTable')->join('customers','customers.IdCustomer','=','bill.IdCustomer')->select('bill.*', 'users.UserName', 'customers.CustomerName','tables.TableName')->where('IdBill','=',$id)->first();
+        $j=0;
+        $count=Bills::count();
+            // echo $i++;
+        $hi=billdetail::findbill($info->IdBill);
+        $i=0;
+        foreach($hi as $value1){
+            $list2=[
+                'idmenu'=>$value1->IdMenu,
+                'namemenu'=>$value1->NameMenu,
+                'quantity'=>$value1->Quantity,
+                'unit'=>$value1->Unit,
+                'price'=>$value1->Price
+            ];
+            $array1[]=$list2;
+        }
+        $list=[
+            'id_bill'=>$info->IdBill,
+            'time'=>$info->created_at,
+            'price'=>$info->Totalprice,
+            'note'=>$info->Note,
+            'status'=>$info->active,
+            'nameuser'=>$info->UserName,
+            'namecus'=>$info->CustomerName,
+            'tablename'=>$info->TableName,
+            'detail'=>$array1
+        ];
+        $array[$j++]=$list;
+        
+        return view('Man.bill.orders',['li'=>$array,'count'=>$count]);
     }
 
     /**

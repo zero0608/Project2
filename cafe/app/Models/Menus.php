@@ -26,13 +26,13 @@ class Menus extends Model
 
 
     public static function index(){
-      $menu=Menus::all();
+      $menu=Menus::where('active','=',0)->get();
       return $menu;
     }
 
 
     public static function menuall($start){
-      $menu=Menus::join('categories','menus.Idcate','=','categories.Idcate')->offset($start)->limit(6)->get();
+      $menu=Menus::join('categories','menus.Idcate','=','categories.Idcate')->where('active','=',0)->offset($start)->limit(6)->get();
       return $menu;
     }
 
@@ -43,12 +43,12 @@ class Menus extends Model
     }
 
     public static function findidcate($idcate){
-      $cateid=Menus::where('Idcate', $idcate)->get();
+      $cateid=Menus::where('Idcate', $idcate)->where('active','=',0)->get();
       return $cateid;
     }
 
     public static function search($name){
-      $search=Menus::where('IdMenu', 'like','%'.$name.'%')->orWhere('NameMenu', 'like',$name.'%')->get();
+      $search=Menus::where('IdMenu', 'like','%'.$name.'%')->orWhere('NameMenu', 'like',$name.'%')->where('active','=',0)->get();
       return $search;
     }
 

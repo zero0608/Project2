@@ -23,13 +23,13 @@ class Tables extends Model
 
     public static function alltable($start)
     {
-        $table=Tables::join('areas','tables.IdArea','=','areas.IdArea') ->offset($start)->limit(10)->get();
+        $table=Tables::join('areas','tables.IdArea','=','areas.IdArea')->where('active','=',0)->offset($start)->limit(10)->get();
         return $table;
     }
 
      public static function index()
     {
-        $table=Tables::all();
+        $table=Tables::where('active','=',0)->get();
         return $table;
     }
 
@@ -41,7 +41,7 @@ class Tables extends Model
 
     public static function findidarea($idarea)
     {
-        $areaid=Tables::where('tables.IdArea', $idarea)->get();
+        $areaid=Tables::where('tables.IdArea', $idarea)->where('active','=',0)->get();
         return $areaid;
     }
     

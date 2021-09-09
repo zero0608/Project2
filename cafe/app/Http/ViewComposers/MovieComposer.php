@@ -21,8 +21,8 @@ class MovieComposer
         $area = Areas::all();
         // dd($area);
         $cate=Cate::all();
-        $table=Tables::all();
-        $menu=Menus::all();
+        $table=Tables::where('active','=',0)->get();
+        $menu=Menus::where('active','=',0)->get();;
 	    
 	// bind to view
         $view->with('cate',$cate)->with('area',$area)->with('menu',$menu)->with('table',$table);

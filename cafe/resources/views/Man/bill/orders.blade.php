@@ -56,7 +56,7 @@
 					<td><?php echo $row['time']; ?></td>
 					<td><?php echo number_format($row['price'],0); ?></td>
 					<td><?php echo $row['note'];?></td>
-					<td>Đã hoàn thành</td>
+					<td>{{$row['status']}}</td>
 				</tr>
 				<tr class="collapse tr-detail td-detail "id="collapse-<?php echo $row['id_bill']; ?>">
 					<td colspan="8">

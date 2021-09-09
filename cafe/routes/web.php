@@ -14,6 +14,7 @@ use App\Http\Controllers\Man\ProductController;
 use App\Http\Controllers\Man\BallotController;
 use App\Http\Controllers\Man\ReceiptController;
 use App\Http\Controllers\Man\PaymentController;
+use App\Http\Controllers\Man\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -59,15 +60,17 @@ Route::prefix('/admin')->as('admin.')->group(function () {
     Route::get('Bills',[BillController::class,'bill'])->name('bill');
     Route::get('pagination_bill',[BillController::class,'pagination'])->name('pagination_bill');
 
-    Route::get('',function(){
-        return view('Man.dashboard');
-    })->name('das');
+    Route::get('',[DashboardController::class,'index'])->name('das');
 
     Route::get('receipts',[ReceiptController::class,'index'])->name('receipts');
     Route::get('pagination_re',[ReceiptController::class,'pagination_re'])->name('pagination_re');
+    Route::get('recepexcel',[ReceiptController::class,'export'])->name('recepexcel');
+    
 
     Route::get('payment',[PaymentController::class,'index'])->name('payment');
     Route::get('pagination_pay',[PaymentController::class,'pagination_pay'])->name('pagination_pay');
+     Route::get('payexcel',[PaymentController::class,'export'])->name('payexcel');
+
 
     Route::get('warehouse',[BallotController::class,'ballot'])->name('ware');
     Route::get('pagination_ballot',[BallotController::class,'pagination'])->name('pagination_ballot');
@@ -109,3 +112,6 @@ Route::resource('cate', CateController::class);
 Route::resource('pro', ProductController::class);
 Route::resource('receipt', ReceiptController::class);
 Route::resource('payment', PaymentController::class);
+Route::resource('bill', BillController::class);
+Route::resource('ballot', BallotController::class);
+

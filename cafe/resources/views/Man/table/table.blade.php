@@ -10,9 +10,6 @@
 		<button class="btn btn-success">
 			<i class="fa fa-sign-in" aria-hidden="true"></i> Nhập file
 		</button>
-		<button class="btn btn-success">
-			<i class="fa fa-sign-out" aria-hidden="true"></i> Xuất file
-		</button>
 	</div>
 </div>
 <div class="row filter-search">

@@ -137,6 +137,7 @@ function cms_select_menu($id_menu){
 						flag = 1;
 						cms_load_infor_order();
 						cms_load_Excesscash();
+						flag = 1;
 					}
 				});
 				if(flag==0){

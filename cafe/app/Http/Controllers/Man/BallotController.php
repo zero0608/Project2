@@ -21,7 +21,7 @@ class BallotController extends Controller
         $current_page=$request->current_page;
         $limit=10;
         $start =($current_page-1)*$limit;
-        $table=Storecepipts::offset($start)->limit(10)->get();
+        $table=Storecepipts::offset($start)->orderByDesc('storereceipts.created_at')->limit(10)->get();
         $j=0;
         foreach($table as $value){
             $hi=Receiptdetail::where('Idreceipt','=',$value->Idreceipt)->get();
@@ -56,7 +56,7 @@ class BallotController extends Controller
 
 
     public static function ballot(){
-        $info=Storecepipts::offset(0)->limit(10)->get();
+        $info=Storecepipts::orderByDesc('storereceipts.created_at')->offset(0)->limit(10)->get();
         $count=Storecepipts::count();
         $j=0;
         foreach($info as $value){
@@ -116,7 +116,7 @@ class BallotController extends Controller
      */
     public function store(Request $request)
     {
-        //
+       
     }
 
     /**
@@ -127,7 +127,37 @@ class BallotController extends Controller
      */
     public function show($id)
     {
-        //
+         $info=Storecepipts::where('Idreceipt','=',$id)->first();
+        $count=Storecepipts::count();
+        $j=0;
+            $hi=Receiptdetail::where('Idreceipt','=',$info->Idreceipt)->get();
+            $i=0;
+            foreach($hi as $value1){
+                $list2=[
+                    'DetaiId'=>$value1->DetaiId,
+                    'Idreceipt'=>$value1->Idreceipt,
+                    'IdProduct'=>$value1->pro,
+                    'Unit'=>$value1->unit,
+                    'Quantity'=>$value1->Quantity,
+                    'Price'=>$value1->Price
+                ];
+
+                $arr[$i++]=$list2;
+            }
+            $list=[
+                'Idreceipt'=>$info->Idreceipt,
+                'IdUser'=>$info->user,
+                'IdSupplier'=>$info->Supplier,
+                'Note'=>$info->Note,
+                'Paymentmethod'=>1,
+                'Totalprice'=>$info->Totalprice,
+                'Time'=>$info->created_at,
+                'detail'=>$arr
+            ];
+
+            $array[$j++]=$list;
+
+        return view('Man.Ballot.warehousing',['li'=>$array,'count'=>$count]);
     }
 
     /**

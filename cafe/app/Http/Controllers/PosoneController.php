@@ -8,6 +8,7 @@ use App\Models\Customers;
 use App\Models\Tables;
 use App\Models\BillS;
 use App\Models\billdetail;
+use App\Models\Receipts;
 class PosoneController extends Controller
 {   
 
@@ -103,6 +104,15 @@ class PosoneController extends Controller
         }else{
             $idbill=$run->IdBill;
         }
+
+        Receipts::create([
+            'UserId'=>'admin',
+            'IdStore'=>1,
+            'Note'=>'tiền bán hàng',
+            'Totalprice'=>$customer_pay,
+            'Format'=>$idbill
+        ]);
+
         echo "<h3>Thông báo !</h3><p>Lưu đơn hàng thành công</p>";
         foreach ($json['detai_oder'] as $value) {
             if($value['id'] != 0){

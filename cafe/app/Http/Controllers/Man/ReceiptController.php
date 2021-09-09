@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Receipts;
 use App\Models\Users;
+use App\Exports\RecepExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 class ReceiptController extends Controller
 {
     /**
@@ -15,7 +18,7 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        $receipt=Receipts::offset(0)->limit(10)->get();
+        $receipt=Receipts::orderByDesc('receipts.created_at')->offset(0)->limit(10)->get();
         $count=Receipts::count();
         $user=Users::all();
         return view('Man.Receipt.receipts',['re'=>$receipt,'count'=>$count,'user'=>$user]);
@@ -24,7 +27,7 @@ class ReceiptController extends Controller
         $current_page=$request->current_page;
         $limit=6;
         $start =($current_page-1)*$limit;
-        $pro=Receipts::offset($start)->limit(10)->get();
+        $pro=Receipts::orderByDesc('receipts.created_at')->offset($start)->limit(10)->get();
         return view('Man.Receipt.viewre',['re'=>$pro,]);
     }
 
@@ -113,5 +116,11 @@ class ReceiptController extends Controller
     }
 
 
-    
+    public function export() 
+    {
+        return Excel::download(new RecepExport, 'receipt.xlsx');
+
+         //  route('admin.payment');
+
+    }
 }
